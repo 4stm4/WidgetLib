@@ -1,0 +1,30 @@
+# Compiled files
+*.o
+*.ppu
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Linker files
+*.res
+link*.res
+linkfiles*.res
+
+# Executables
+Demo.SDL2
+demo/Demo.SDL2
+test_*
+Test*
+
+# IDE/Editor files
+*.lps
+*.lrs
+*.bak
+*~
+.DS_Store
+
+# Build directories
+bin/
+obj/
+lib/

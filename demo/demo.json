@@ -1,0 +1,99 @@
+{
+  "type": "Panel",
+  "id": "root",
+  "bounds": { "x": 0, "y": 0, "w": 800, "h": 600 },
+  "skin": "default",
+  "children": [
+    {
+      "type": "Label",
+      "id": "title",
+      "bounds": { "x": 0, "y": 30, "w": 800, "h": 50 },
+      "text": "Doom-Style Widget Demo",
+      "align": "center",
+      "color": 16777215,
+      "font": "/System/Library/Fonts/Helvetica.ttc",
+      "fontSize": 32
+    },
+    {
+      "type": "Label",
+      "id": "subtitle",
+      "bounds": { "x": 0, "y": 90, "w": 800, "h": 30 },
+      "text": "Click buttons to see different skins",
+      "align": "center",
+      "color": 12632256,
+      "font": "/System/Library/Fonts/Helvetica.ttc",
+      "fontSize": 16
+    },
+    {
+      "type": "Button",
+      "id": "btnBrown",
+      "bounds": { "x": 50, "y": 180, "w": 140, "h": 50 },
+      "skin": "doom_brown",
+      "caption": "Brown Metal",
+      "color": 16777215,
+      "font": "/System/Library/Fonts/Helvetica.ttc",
+      "fontSize": 16
+    },
+    {
+      "type": "Button",
+      "id": "btnGray",
+      "bounds": { "x": 220, "y": 180, "w": 140, "h": 50 },
+      "skin": "doom_gray",
+      "caption": "Gray Metal",
+      "color": 16777215,
+      "font": "/System/Library/Fonts/Helvetica.ttc",
+      "fontSize": 16
+    },
+    {
+      "type": "Button",
+      "id": "btnRed",
+      "bounds": { "x": 390, "y": 180, "w": 140, "h": 50 },
+      "skin": "doom_red",
+      "caption": "Hell Red",
+      "color": 16777215,
+      "font": "/System/Library/Fonts/Helvetica.ttc",
+      "fontSize": 16
+    },
+    {
+      "type": "Button",
+      "id": "btnGreen",
+      "bounds": { "x": 560, "y": 180, "w": 140, "h": 50 },
+      "skin": "doom_green",
+      "caption": "Tech Green",
+      "color": 16777215,
+      "font": "/System/Library/Fonts/Helvetica.ttc",
+      "fontSize": 16
+    },
+    {
+      "type": "Button",
+      "id": "btnBlue",
+      "bounds": { "x": 145, "y": 260, "w": 140, "h": 50 },
+      "skin": "doom_blue",
+      "caption": "Tech Blue",
+      "color": 16777215,
+      "font": "/System/Library/Fonts/Helvetica.ttc",
+      "fontSize": 16
+    },
+    {
+      "type": "Button",
+      "id": "btnDefault",
+      "bounds": { "x": 315, "y": 260, "w": 140, "h": 50 },
+      "skin": "default",
+      "caption": "Default",
+      "color": 0,
+      "font": "/System/Library/Fonts/Helvetica.ttc",
+      "fontSize": 16
+    },
+    {
+      "type": "Button",
+      "id": "btnQuit",
+      "bounds": { "x": 340, "y": 500, "w": 120, "h": 50 },
+      "skin": "doom_red",
+      "caption": "QUIT",
+      "command": "app.quit",
+      "color": 16777215,
+      "font": "/System/Library/Fonts/Helvetica.ttc",
+      "fontSize": 20
+    }
+  ]
+}
