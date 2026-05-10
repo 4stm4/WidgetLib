@@ -257,7 +257,8 @@ function SDL_CreateTexture(renderer: PSDL_Renderer; format: UInt32; access, w, h
 function SDL_CreateTextureFromSurface(renderer: PSDL_Renderer; surface: PSDL_Surface): PSDL_Texture; cdecl; external 'SDL2' name 'SDL_CreateTextureFromSurface';
 procedure SDL_DestroyTexture(texture: PSDL_Texture); cdecl; external 'SDL2' name 'SDL_DestroyTexture';
 
-function SDL_LoadBMP(file_: PChar): PSDL_Surface; cdecl; external 'SDL2' name 'SDL_LoadBMP_RW';
+function SDL_RWFromFile(file_: PChar; mode: PChar): Pointer; cdecl; external 'SDL2' name 'SDL_RWFromFile';
+function SDL_LoadBMP_RW(src: Pointer; freesrc: Int32): PSDL_Surface; cdecl; external 'SDL2' name 'SDL_LoadBMP_RW';
 function SDL_FreeSurface(surface: PSDL_Surface): PSDL_Surface; cdecl; external 'SDL2' name 'SDL_FreeSurface';
 
 function SDL_RenderSetClipRect(renderer: PSDL_Renderer; rect: PSDL_Rect): Int32; cdecl; external 'SDL2' name 'SDL_RenderSetClipRect';
@@ -273,6 +274,7 @@ procedure SDL_GetWindowSize(window: PSDL_Window; w, h: PInt32); cdecl; external 
 
 function SDL_MapRGBA(format: Pointer; r, g, b, a: UInt8): UInt32; cdecl; external 'SDL2' name 'SDL_MapRGBA';
 function SDL_AllocFormat(pixel_format: UInt32): Pointer; cdecl; external 'SDL2' name 'SDL_AllocFormat';
+function SDL_SetColorKey(surface: PSDL_Surface; flag: Int32; key: UInt32): Int32; cdecl; external 'SDL2' name 'SDL_SetColorKey';
 
 function SDL_PollEvent(event: Pointer): Int32; cdecl; external 'SDL2' name 'SDL_PollEvent';
 

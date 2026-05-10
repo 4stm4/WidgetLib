@@ -27,9 +27,15 @@ type
   TSDL2ImageLoader = class(IImageLoader)
   private
     FRenderer: PSDL_Renderer;
+    FColorKeyEnabled: Boolean;
+    FColorKeyR: Byte;
+    FColorKeyG: Byte;
+    FColorKeyB: Byte;
   public
     constructor Create(renderer: PSDL_Renderer);
     function Load(path: String): IImage; override;
+    procedure EnableColorKey(r, g, b: Byte);
+    procedure DisableColorKey;
   end;
 
 implementation
@@ -75,6 +81,23 @@ constructor TSDL2ImageLoader.Create(renderer: PSDL_Renderer);
 begin
   inherited Create;
   FRenderer := renderer;
+  FColorKeyEnabled := False;
+  FColorKeyR := 0;
+  FColorKeyG := 0;
+  FColorKeyB := 0;
+end;
+
+procedure TSDL2ImageLoader.EnableColorKey(r, g, b: Byte);
+begin
+  FColorKeyEnabled := True;
+  FColorKeyR := r;
+  FColorKeyG := g;
+  FColorKeyB := b;
+end;
+
+procedure TSDL2ImageLoader.DisableColorKey;
+begin
+  FColorKeyEnabled := False;
 end;
 
 function TSDL2ImageLoader.Load(path: String): IImage;
@@ -83,30 +106,35 @@ var
   surfaceRec: ^TSDL_Surface;
   texture: PSDL_Texture;
   width, height: Integer;
+  colorKey: UInt32;
+  rw: Pointer;
 begin
   Result := nil;
 
   if FRenderer = nil then
     raise Exception.Create('SDL2ImageLoader: renderer is nil');
 
-  // Load using SDL_image or SDL_LoadBMP
-  // Using SDL_LoadBMP for BMP files
-  surface := SDL_LoadBMP(PChar(path));
+  rw := SDL_RWFromFile(PChar(path), PChar('rb'));
+  if rw = nil then
+    raise Exception.Create('Cannot open "' + path + '": ' + SDL_GetError);
+  surface := SDL_LoadBMP_RW(rw, 1);
   if surface = nil then
-  begin
-    // Try SDL_image if available (IMG_Load)
-    // For now, just fail
     raise Exception.Create('Failed to load image "' + path + '": ' + SDL_GetError);
-  end;
 
   try
-    // Create texture from surface
+    surfaceRec := surface;
+
+    if FColorKeyEnabled then
+    begin
+      colorKey := SDL_MapRGBA(surfaceRec^.format, FColorKeyR, FColorKeyG, FColorKeyB, 255);
+      SDL_SetColorKey(surface, 1, colorKey);
+    end;
+
     texture := SDL_CreateTextureFromSurface(FRenderer, surface);
     if texture = nil then
       raise Exception.Create('Failed to create texture from "' + path + '": ' + SDL_GetError);
 
-    surfaceRec := surface;
-    width := surfaceRec^.w;
+    width  := surfaceRec^.w;
     height := surfaceRec^.h;
 
     Result := TSDL2Image.Create(texture, width, height);
