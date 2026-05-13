@@ -405,17 +405,14 @@ var
   srcRect: TRect;
 begin
   if r = nil then Exit;
-  WriteLn('HUD.Render begin');
 
   bounds := GetBounds;
 
   if (FHudBgImg <> nil) and (FHudBgImg.GetHandle <> nil) then
   begin
-    WriteLn('HUD.DrawImage');
     srcRect.x := 0; srcRect.y := 0;
     srcRect.w := FHudBgImg.GetWidth; srcRect.h := FHudBgImg.GetHeight;
     r.DrawImage(FHudBgImg, srcRect, bounds);
-    WriteLn('HUD.DrawImage done');
   end
   else
   begin
@@ -429,9 +426,7 @@ begin
     r.DrawFilledRect(MakeRect(576, bounds.y + 4, 1, bounds.h - 8), $5a3a18);
   end;
 
-  WriteLn('HUD.inherited Render');
   inherited Render(r);
-  WriteLn('HUD.Render done');
 end;
 
 procedure TDoomHUD.UpdateWeaponHighlight;

@@ -7,6 +7,7 @@ interface
 uses
   SysUtils,
   SDL2,
+  SDL2_image,
   Core.Contracts;
 
 type
@@ -33,6 +34,7 @@ type
     FColorKeyB: Byte;
   public
     constructor Create(renderer: PSDL_Renderer);
+    destructor  Destroy; override;
     function Load(path: String): IImage; override;
     procedure EnableColorKey(r, g, b: Byte);
     procedure DisableColorKey;
@@ -85,6 +87,14 @@ begin
   FColorKeyR := 0;
   FColorKeyG := 0;
   FColorKeyB := 0;
+  // Initialize SDL2_image with PNG (and JPG) support
+  IMG_Init(IMG_INIT_PNG or IMG_INIT_JPG);
+end;
+
+destructor TSDL2ImageLoader.Destroy;
+begin
+  IMG_Quit;
+  inherited Destroy;
 end;
 
 procedure TSDL2ImageLoader.EnableColorKey(r, g, b: Byte);
@@ -102,29 +112,43 @@ end;
 
 function TSDL2ImageLoader.Load(path: String): IImage;
 var
-  surface: PSDL_Surface;
+  surface:    PSDL_Surface;
   surfaceRec: ^TSDL_Surface;
-  texture: PSDL_Texture;
+  texture:    PSDL_Texture;
   width, height: Integer;
-  colorKey: UInt32;
-  rw: Pointer;
+  colorKey:   UInt32;
+  rw:         Pointer;
+  ext:        String;
 begin
   Result := nil;
 
   if FRenderer = nil then
     raise Exception.Create('SDL2ImageLoader: renderer is nil');
 
-  rw := SDL_RWFromFile(PChar(path), PChar('rb'));
-  if rw = nil then
-    raise Exception.Create('Cannot open "' + path + '": ' + SDL_GetError);
-  surface := SDL_LoadBMP_RW(rw, 1);
-  if surface = nil then
-    raise Exception.Create('Failed to load image "' + path + '": ' + SDL_GetError);
+  ext := LowerCase(ExtractFileExt(path));
+
+  if ext = '.png' then
+  begin
+    // PNG — use SDL2_image for full alpha support
+    surface := IMG_Load(PChar(path));
+    if surface = nil then
+      raise Exception.Create('IMG_Load failed for "' + path + '": ' + SDL_GetError);
+  end
+  else
+  begin
+    // BMP (or other) — legacy path with optional color key
+    rw := SDL_RWFromFile(PChar(path), PChar('rb'));
+    if rw = nil then
+      raise Exception.Create('Cannot open "' + path + '": ' + SDL_GetError);
+    surface := SDL_LoadBMP_RW(rw, 1);
+    if surface = nil then
+      raise Exception.Create('Failed to load image "' + path + '": ' + SDL_GetError);
+  end;
 
   try
     surfaceRec := surface;
 
-    if FColorKeyEnabled then
+    if FColorKeyEnabled and (ext <> '.png') then
     begin
       colorKey := SDL_MapRGBA(surfaceRec^.format, FColorKeyR, FColorKeyG, FColorKeyB, 255);
       SDL_SetColorKey(surface, 1, colorKey);

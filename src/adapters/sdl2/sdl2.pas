@@ -269,6 +269,29 @@ function SDL_RenderCopy(renderer: PSDL_Renderer; texture: PSDL_Texture; srcrect,
 function SDL_RenderFillRect(renderer: PSDL_Renderer; rect: PSDL_Rect): Int32; cdecl; external 'SDL2' name 'SDL_RenderFillRect';
 function SDL_RenderDrawRect(renderer: PSDL_Renderer; rect: PSDL_Rect): Int32; cdecl; external 'SDL2' name 'SDL_RenderDrawRect';
 
+// Blend modes
+const
+  SDL_BLENDMODE_NONE    = 0;
+  SDL_BLENDMODE_BLEND   = 1;
+  SDL_BLENDMODE_ADD     = 2;
+  SDL_BLENDMODE_MOD     = 4;
+  SDL_TEXTUREACCESS_STREAMING = 1;
+  SDL_TEXTUREACCESS_TARGET    = 2;
+
+type
+  SDL_BlendMode = Int32;
+
+function SDL_SetRenderDrawBlendMode(renderer: PSDL_Renderer; blendMode: SDL_BlendMode): Int32; cdecl; external 'SDL2' name 'SDL_SetRenderDrawBlendMode';
+function SDL_GetRenderDrawBlendMode(renderer: PSDL_Renderer; blendMode: PSDL_Rect): Int32; cdecl; external 'SDL2' name 'SDL_GetRenderDrawBlendMode';
+function SDL_SetTextureBlendMode(texture: PSDL_Texture; blendMode: SDL_BlendMode): Int32; cdecl; external 'SDL2' name 'SDL_SetTextureBlendMode';
+function SDL_SetTextureAlphaMod(texture: PSDL_Texture; alpha: UInt8): Int32; cdecl; external 'SDL2' name 'SDL_SetTextureAlphaMod';
+function SDL_SetTextureColorMod(texture: PSDL_Texture; r, g, b: UInt8): Int32; cdecl; external 'SDL2' name 'SDL_SetTextureColorMod';
+function SDL_RenderDrawLine(renderer: PSDL_Renderer; x1, y1, x2, y2: Int32): Int32; cdecl; external 'SDL2' name 'SDL_RenderDrawLine';
+function SDL_RenderDrawPoint(renderer: PSDL_Renderer; x, y: Int32): Int32; cdecl; external 'SDL2' name 'SDL_RenderDrawPoint';
+function SDL_RenderDrawLines(renderer: PSDL_Renderer; points: PSDL_Point; count: Int32): Int32; cdecl; external 'SDL2' name 'SDL_RenderDrawLines';
+function SDL_RenderDrawPoints(renderer: PSDL_Renderer; points: PSDL_Point; count: Int32): Int32; cdecl; external 'SDL2' name 'SDL_RenderDrawPoints';
+function SDL_RenderCopyEx(renderer: PSDL_Renderer; texture: PSDL_Texture; srcrect, dstrect: PSDL_Rect; angle: Double; center: PSDL_Point; flip: Int32): Int32; cdecl; external 'SDL2' name 'SDL_RenderCopyEx';
+
 function SDL_GetWindowSurface(window: PSDL_Window): PSDL_Surface; cdecl; external 'SDL2' name 'SDL_GetWindowSurface';
 procedure SDL_GetWindowSize(window: PSDL_Window; w, h: PInt32); cdecl; external 'SDL2' name 'SDL_GetWindowSize';
 

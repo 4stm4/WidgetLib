@@ -399,14 +399,11 @@ var
   bounds, srcRect: TRect;
 begin
   if r = nil then Exit;
-  WriteLn('Scene.Render begin');
 
   bounds := GetBounds;
 
   // Фон
-  WriteLn('Scene.DrawBg');
   DrawBackground(r);
-  WriteLn('Scene.DrawBg done');
   
   // Враги (сортировка по глубине - дальние первыми)
   for i := High(FEnemies) downto 0 do
@@ -455,9 +452,7 @@ begin
   r.DrawRect(MakeRect(crossX, crossY - 8, 1, 16), $00FF00);
 
   // Пушка
-  WriteLn('Scene.DrawGun');
   DrawGun(r);
-  WriteLn('Scene.Render done');
 end;
 
 procedure TDoomScene.Fire(fromX, fromY: Integer);

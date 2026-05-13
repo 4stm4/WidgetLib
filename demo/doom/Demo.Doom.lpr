@@ -36,10 +36,8 @@ var
   fontPath:      String;
 
 begin
-  // Отключаем FPU исключения
   SetExceptionMask([exInvalidOp, exDenormalized, exZeroDivide, exOverflow, exUnderflow, exPrecision]);
 
-  // Инициализация SDL2
   if SDL_Init(SDL_INIT_VIDEO) <> 0 then
     raise Exception.Create('SDL_Init failed: ' + SDL_GetError);
 
@@ -47,21 +45,17 @@ begin
     raise Exception.Create('TTF_Init failed: ' + SDL_GetError);
 
   try
-    // Создаём рендерер
     renderer := TSDL2Renderer.CreateWithWindow('DOOM WidgetLib Demo', 800, 600);
-    
+
     try
-      // Менеджер ресурсов для спрайтов (с colorkey: чёрный = прозрачный)
       loaderSprites := TSDL2ImageLoader.Create(renderer.GetRenderer);
       loaderSprites.EnableColorKey(0, 0, 0);
       rmSprites := TResourceManager.Create(loaderSprites, TSDL2FontLoader.Create);
 
-      // Менеджер ресурсов для фонов (без colorkey)
       loaderBgs := TSDL2ImageLoader.Create(renderer.GetRenderer);
       rmBgs := TResourceManager.Create(loaderBgs, nil);
 
       try
-        // Шрифт
         fontPath := 'assets/fonts/DoomFont.ttf';
         {$IFDEF DARWIN}
         if not FileExists(fontPath) then
@@ -72,48 +66,31 @@ begin
           fontPath := '/usr/share/fonts/truetype/freefont/FreeMono.ttf';
         {$ENDIF}
 
-        WriteLn('Getting font...');
         font := rmSprites.GetFont(fontPath, 14);
-        WriteLn('Font OK');
 
-        WriteLn('Loading assets...');
         LoadDoomAssets(rmSprites, rmBgs, assets, 'assets');
-        WriteLn('Assets OK');
-
-        // Doom-скины
         LoadDoomSkins(GlobalSkinManager, rmSprites);
-        WriteLn('Skins OK');
 
         api := TSDL2WidgetAPI.Create(renderer, rmSprites, GlobalSkinManager, True);
-        WriteLn('API OK');
 
         try
-          WriteLn('Creating game...');
           game := TDoomGame.Create(api, font, assets);
-          WriteLn('Game created OK');
 
           try
             lastTicks := SDL_GetTicks;
-            WriteLn('Entering game loop...');
 
             while game.IsRunning do
             begin
-              nowTicks := SDL_GetTicks;
-              dt := (nowTicks - lastTicks) / 1000.0;
+              nowTicks  := SDL_GetTicks;
+              dt        := (nowTicks - lastTicks) / 1000.0;
               lastTicks := nowTicks;
+              if dt > 0.1 then dt := 0.1;
 
-              if dt > 0.1 then
-                dt := 0.1;
-
-              WriteLn('ProcessInput...');
               game.ProcessInput;
-              WriteLn('Update...');
               game.Update(dt);
-              WriteLn('Render...');
               game.Render;
-              WriteLn('Delay...');
+
               SDL_Delay(1);
-              WriteLn('Frame done');
             end;
 
           finally
@@ -130,11 +107,11 @@ begin
         loaderSprites.Free;
         loaderBgs.Free;
       end;
-      
+
     finally
       renderer.Free;
     end;
-    
+
   finally
     TTF_Quit;
     SDL_Quit;

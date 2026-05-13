@@ -80,7 +80,7 @@ type
 
 implementation
 
-uses Logger;
+{ Logger not used directly — avoids case-sensitive PPU lookup issue on APFS }
 
 constructor TResourceManager.Create(il: IImageLoader; fl: IFontLoader);
 begin
@@ -153,7 +153,7 @@ begin
   except
     on E: Exception do
     begin
-      Logger.TLogger.Instance.Log(llWarn, 'Image load failed: ' + path + ' (' + E.Message + ')');
+      WriteLn(StdErr, '[WARN] Image load failed: ' + path + ' (' + E.Message + ')');
     end;
   end;
 
@@ -184,7 +184,7 @@ begin
   except
     on E: Exception do
     begin
-      Logger.TLogger.Instance.Log(llWarn, 'Font load failed: ' + path + ' (' + E.Message + ')');
+      WriteLn(StdErr, '[WARN] Font load failed: ' + path + ' (' + E.Message + ')');
     end;
   end;
 
